@@ -1,0 +1,190 @@
+---
+openapi: 3.0.0
+info:
+  title: Glovo menu API
+  description:
+  contact:
+    email: rar.stas@gmail.com
+  version: 1.0.0
+tags:
+- name: options
+- name: products
+paths:
+  /options/:storeAddressId:
+    get:
+      tags:
+      - options
+      description: |
+        get options by groups
+      operationId: optionsGet
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionGroup'
+    patch:
+      tags:
+      - options
+      description: |
+        edit options
+      operationId: optionsPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/OptionGroup'
+      responses:
+        "204":
+          description: No Content
+  /options/:storeAddressId/:groupId:
+    delete:
+      tags:
+      - options
+      description: |
+        delete group of options.
+      operationId: optionGroupDelete
+      responses:
+        "204":
+          description: No Content
+  /options/:storeAddressId/:groupId/:optionId:
+    delete:
+      tags:
+      - options
+      description: |
+        delete option by id.
+      operationId: optionDelete
+      responses:
+        "204":
+          description: No Content
+  /products/:storeAddressId:
+    get:
+      tags:
+      - products
+      description: |
+        get products by groups
+      operationId: productsGet
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
+    patch:
+      tags:
+      - products
+      description: |
+        edit product
+      operationId: productsPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductGroup'
+      responses:
+        "204":
+          description: No Content
+  /product/:storeAddressIds/:groupId:
+    delete:
+      tags:
+      - products
+      description: |
+        delete group of products
+      operationId: productGroupDelete
+      responses:
+        "204":
+          description: No Content
+  /products/:storeAddressId/:groupId/:productId:
+    delete:
+      tags:
+      - products
+      description: |
+        delete product by id
+      operationId: productDelete
+      responses:
+        "204":
+          description: No Content
+components:
+  schemas:
+    Option:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        active:
+          type: boolean
+        price:
+          type: number
+      description: option for products
+    OptionGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        active:
+          type: boolean
+        min:
+          type: number
+        max:
+          type: number
+        moreThanOnce:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+      description: group of options
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        active:
+          type: boolean
+        description:
+          type: string
+        price:
+          type: number
+        hitSales:
+          type: boolean
+        image:
+          type: string
+        options:
+          type: array
+          items:
+            type: string
+          description: array id options
+      description: product
+    ProductGroup:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        active:
+          type: boolean
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      description: group of products
+
