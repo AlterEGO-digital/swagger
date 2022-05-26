@@ -43,6 +43,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "422":
+          description: Unprocessable Content
   /options/:storeAddressId/:groupId:
     delete:
       tags:
@@ -53,6 +55,14 @@ paths:
       responses:
         "204":
           description: No Content
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionGroup'
   /options/:storeAddressId/:groupId/:optionId:
     delete:
       tags:
@@ -63,6 +73,14 @@ paths:
       responses:
         "204":
           description: No Content
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Option'
   /products/:storeAddressId:
     get:
       tags:
@@ -96,6 +114,8 @@ paths:
       responses:
         "204":
           description: No Content
+        "422":
+          description: Unprocessable Content
   /product/:storeAddressIds/:groupId:
     delete:
       tags:
@@ -106,6 +126,14 @@ paths:
       responses:
         "204":
           description: No Content
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
   /products/:storeAddressId/:groupId/:productId:
     delete:
       tags:
@@ -116,6 +144,14 @@ paths:
       responses:
         "204":
           description: No Content
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
 components:
   schemas:
     Option:
@@ -167,6 +203,8 @@ components:
           type: boolean
         image:
           type: string
+        position:
+          type: integer
         options:
           type: array
           items:
@@ -182,6 +220,8 @@ components:
           type: string
         active:
           type: boolean
+        position:
+          type: integer
         items:
           type: array
           items:
