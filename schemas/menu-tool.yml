@@ -41,6 +41,14 @@ paths:
               items:
                 $ref: '#/components/schemas/OptionGroup'
       responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionGroup'
         "204":
           description: No Content
         "422":
@@ -112,11 +120,19 @@ paths:
               items:
                 $ref: '#/components/schemas/ProductGroup'
       responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
         "204":
           description: No Content
         "422":
           description: Unprocessable Content
-  /product/:storeAddressIds/:groupId:
+  /products/:storeAddressId/:groupId:
     delete:
       tags:
       - products
@@ -152,6 +168,67 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+  /menu-collections/:storeAddressId:
+    get:
+      tags:
+        - collections
+      description: |
+        get collections
+      operationId: CollectionsGet
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
+    patch:
+      tags:
+        - collections
+      description: |
+        edit collections
+      operationId: collectionsPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Collections'
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
+        "204":
+          description: No Content
+        "422":
+          description: Unprocessable Content
+  /menu-collections/:storeAddressId/:collectionId:
+    delete:
+      tags:
+        - collections
+      description: |
+        delete menu-collection by id
+      operationId: CollectionDelete
+      responses:
+        "204":
+          description: No Content
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
 components:
   schemas:
     Option:
@@ -227,4 +304,24 @@ components:
           items:
             $ref: '#/components/schemas/Product'
       description: group of products
+    Collections:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        active:
+          type: boolean
+        position:
+          type: integer
+        image:
+          type: string
+        productGroups:
+          type: array
+          items:
+            type: string
+          description: array id of ProductGroups
+
+      description: Collection list
 
