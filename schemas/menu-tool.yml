@@ -229,6 +229,29 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Collections'
+  /orders/status/:storeAddressId:
+    put:
+      tags:
+        - orders
+      description: |
+        update order status
+      operationId: orderUpdateStatus
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                orderId:
+                  type: string
+      responses:
+        "200":
+          description: Ok
+        "400":
+          description: 'bad request'
 components:
   schemas:
     Option:
