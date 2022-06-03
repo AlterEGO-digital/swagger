@@ -236,6 +236,13 @@ paths:
       description: |
         update order status
       operationId: orderUpdateStatus
+      parameters:
+        - in: query
+          name: Status List
+          description: "select value of Status List"
+          schema:
+            type: string
+            enum: [ "ACCEPTED", "READY_FOR_PICKUP", "OUT_FOR_DELIVERY" ]
       requestBody:
         required: true
         content:
