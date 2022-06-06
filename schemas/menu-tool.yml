@@ -259,6 +259,43 @@ paths:
           description: Ok
         "400":
           description: 'bad request'
+  /schedule/:storeAddressId:
+    get:
+      tags:
+        - schedule
+      description: |
+        get schedule by store id
+      operationId: ScheduleGet
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  timezone:
+                    type: string
+                  schedule:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day_of_week:
+                          type: integer
+                        time_slots:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              opening:
+                                type: string
+                              closing:
+                                type: string
+        "400":
+          description: 'bad request'
+
+
 components:
   schemas:
     Option:
