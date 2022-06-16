@@ -445,7 +445,7 @@ components:
                   type: string
                 tax_id:
                   type: string
-        product:
+        products:
           type: array
           items:
             type: object
