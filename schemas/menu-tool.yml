@@ -211,12 +211,14 @@ paths:
           description: No Content
         "422":
           description: Unprocessable Content
-  /menu-collections/:storeAddressId/:collectionId:
+  /menu-collections/:storeAddressId/:collectionId?:
     delete:
       tags:
         - collections
       description: |
-        delete menu-collection by id
+        * collectionId parameter is optional
+        * Deleting a collection and all related entities by collectionId
+        * Deleting only collections by storeAddressId
       operationId: CollectionDelete
       responses:
         "204":
