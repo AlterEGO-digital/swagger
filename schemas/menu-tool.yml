@@ -3,12 +3,10 @@ openapi: 3.0.0
 info:
   title: Glovo menu API
   description: ''
-  contact:
-    email: rar.stas@gmail.com
   version: 1.0.0
 tags:
-- name: options
-- name: products
+  - name: options
+  - name: products
 paths:
   /options/:storeAddressId:
     get:
@@ -89,6 +87,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Option'
+
   /products/:storeAddressId:
     get:
       tags:
@@ -168,6 +167,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
+
   /menu-collections/:storeAddressId:
     get:
       tags:
@@ -231,6 +231,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Collections'
+
   /orders/status/:storeAddressId:
     put:
       tags:
@@ -261,6 +262,7 @@ paths:
           description: Ok
         "400":
           description: 'bad request'
+
   /schedule/:storeAddressId:
     get:
       tags:
@@ -297,8 +299,123 @@ paths:
         "400":
           description: 'bad request'
 
+  /spots/{token}/getAccountNumber/:
+    parameters:
+      - $ref: '#/components/parameters/tokenUrl'
+    get:
+      tags:
+        - spots
+      description: |
+        get acount number
+      operationId: spotsAccount
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accountNumber:
+                    type: string
+                    example: 123
+  /spots/{accountNumber}/:
+    parameters:
+      - $ref: '#/components/parameters/accountNumber'
+    get:
+      tags:
+        - spots
+      description: |
+        get spots
+      operationId: spotsGet
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Spot'
+
+  /spots/{accountNumber}/{spotId}/:
+    parameters:
+      - $ref: '#/components/parameters/accountNumber'
+      - $ref: '#/components/parameters/spotId'
+    patch:
+      tags:
+        - spots
+      description: |
+        set spot id
+      operationId: spotPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                storeAddressId:
+                  type: string
+                  example: 321
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Spot'
+                  - type: object
+                    properties:
+                      storeAddressID:
+                        example: 321
+
+  /spots/{accountNumber}/{spotId}/sendError/:
+    parameters:
+      - $ref: '#/components/parameters/accountNumber'
+      - $ref: '#/components/parameters/spotId'
+    post:
+      tags:
+        - spots
+      description: |
+        set error about spot
+      operationId: spotError
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+
 
 components:
+  parameters:
+    accountNumber:
+      name: accountNumber
+      in: path
+      description: account number
+      required: true
+      schema:
+        type: string
+    tokenUrl:
+      name: token
+      in: path
+      description: access token
+      required: true
+      schema:
+        type: string
+    spotId:
+      name: spotId
+      in: path
+      description: access token
+      required: true
+      schema:
+        type: string
+
   schemas:
     Option:
       type: object
@@ -515,4 +632,24 @@ components:
         payment_strategy:
           type: string
       description: Order cancelled object
+
+    Spot:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123
+        name:
+          type: string
+          example: HOC
+        address:
+          type: string
+          example: вул. Валентинівська, 743, Київ
+        storeAddressID:
+          type: string
+          example: 123
+        status:
+          type: string
+          enum: ["PENDING", "SUCCESS", "ERROR"]
+          example: PENDING
 
