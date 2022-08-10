@@ -369,7 +369,7 @@ paths:
                   - $ref: '#/components/schemas/Spot'
                   - type: object
                     properties:
-                      storeAddressID:
+                      storeAddressId:
                         example: 321
 
   /spots/{accountNumber}/{spotId}/sendError/:
@@ -388,8 +388,13 @@ paths:
           content:
             application/json:
               schema:
-                type: boolean
-                example: true
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Spot'
+                  - type: object
+                    properties:
+                      status:
+                        example: PENDING
 
 
 components:
@@ -645,7 +650,7 @@ components:
         address:
           type: string
           example: вул. Валентинівська, 743, Київ
-        storeAddressID:
+        storeAddressId:
           type: string
           example: 123
         status:
