@@ -232,6 +232,71 @@ paths:
                 items:
                   $ref: '#/components/schemas/Collections'
 
+  /menu-supercollections/:storeAddressId:
+    get:
+      tags:
+        - super collections
+      description: |
+        get SuperCollections
+      operationId: SuperCollectionsGet
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+    patch:
+      tags:
+        - super collections
+      description: |
+        edit SuperCollections
+      operationId: superCollectionsPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/SuperCollections'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+
+  /menu-supercollections/:storeAddressId/:superCollectionId?:
+      delete:
+        tags:
+          - super collections
+        description: |
+          * superCollectionId parameter is optional
+          * Deleting a superCollection and all related entities by superCollectionId
+          * Deleting only superCollection by storeAddressId
+        operationId: SuperCollectionDelete
+        responses:
+          '200':
+            description: Ok
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SuperCollections'
+          '204':
+            description: No Content
+
   /orders/status/:storeAddressId:
     put:
       tags:
@@ -515,6 +580,26 @@ components:
           description: array id of ProductGroups
 
       description: Collection list
+    SuperCollections:
+        type: object
+        properties:
+          id:
+            type: string
+          title:
+            type: string
+          active:
+            type: boolean
+          position:
+            type: integer
+          image:
+            type: string
+          menuCollections:
+            type: array
+            items:
+              type: string
+            description: array id of MenuCollection
+        description: SuperCollection list
+
     Order:
       type: object
       properties:
