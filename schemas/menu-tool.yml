@@ -136,7 +136,7 @@ paths:
       tags:
         - products
       description: |
-        edit one product and send to glovo
+       This method only edits price and availability for one product
       operationId: productPatch
       requestBody:
         required: true
