@@ -108,7 +108,7 @@ paths:
       tags:
       - products
       description: |
-        edit product
+        edit products
       operationId: productsPatch
       requestBody:
         required: true
@@ -127,6 +127,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductGroup'
+        "204":
+          description: No Content
+        "422":
+          description: Unprocessable Content
+  /products/:storeAddressId/modify:
+    patch:
+      tags:
+        - products
+      description: |
+        edit one product and send to glovo
+      operationId: productPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/Product'
+      responses:
+        "200":
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
         "204":
           description: No Content
         "422":
