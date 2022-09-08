@@ -145,7 +145,7 @@ paths:
             schema:
               type: array
               items:
-                $ref: '#/components/schemas/Product'
+                $ref: '#/components/schemas/ProductGroup'
       responses:
         "200":
           description: Ok
