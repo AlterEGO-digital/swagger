@@ -1,22 +1,43 @@
----
 openapi: 3.0.0
 info:
   title: Glovo menu API
   description: ''
   version: 1.0.0
+servers:
+  - url: https://menu-tool.glovoapp.com/partners-api/api
 tags:
   - name: options
+    description: Additional options that could be added to the product. Options are not required
   - name: products
+    description: Product data related to the store. Product group is lower categorization of a Glovo menu
+  - name: collections
+    description: Main categorization of a Glovo menu. It is mandatory to have at least one collection in your menu.
+  - name: super collections
+    description: Uppermost categorization of a Glovo menu. Super collections are not required. If at least one exists, a list of all the super collections is displayed to customers when they open a store in the app. Otherwise, the collection is displayed as the uppermost categorization.
+  - name: orders
+    description: Update order status / products
+  - name: schedule
+    description: working schedule of specific store
+  - name: spots
+    description: Pos terminals integration via poster
 paths:
-  /options/:storeAddressId:
+  /options/{storeAddressId}:
     get:
       tags:
-      - options
+        - options
+      summary: get all options by group
       description: |
-        get options by groups
+        Get all options by groups. Each option group can have a minimum and maximum of choices for the customer. It is not mandatory for a product to have option. Each option could have a different price impact. Examples of attribute groups could include: Sauces, Drinks, etc
       operationId: optionsGet
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -26,10 +47,18 @@ paths:
                   $ref: '#/components/schemas/OptionGroup'
     patch:
       tags:
-      - options
+        - options
+      summary: update options
       description: |
-        edit options
+        Allows you to perform a partial update over an option. Only the options sent in the request will be updated.
       operationId: optionsPatch
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -39,7 +68,7 @@ paths:
               items:
                 $ref: '#/components/schemas/OptionGroup'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -47,21 +76,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OptionGroup'
-        "204":
+        '204':
           description: No Content
-        "422":
+        '422':
           description: Unprocessable Content
-  /options/:storeAddressId/:groupId:
+  /options/{storeAddressId}/{groupId}:
     delete:
       tags:
-      - options
+        - options
+      summary: delete group of options
       description: |
-        delete group of options.
+        Allows you to delete group of options.
       operationId: optionGroupDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: Unique identifier of the option group
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: No Content
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -69,17 +110,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/OptionGroup'
-  /options/:storeAddressId/:groupId/:optionId:
+        '204':
+          description: No Content
+  /options/{storeAddressId}/{groupId}/{optionId}:
     delete:
       tags:
-      - options
+        - options
+      summary: delete option
       description: |
-        delete option by id.
+        Allows you to delete option by id.
       operationId: optionDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: Unique identifier of the option group
+          required: true
+          schema:
+            type: string
+        - name: optionId
+          in: path
+          description: Unique identifier of the option
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: No Content
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -87,16 +148,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Option'
-
-  /products/:storeAddressId:
+        '204':
+          description: No Content
+  /products/{storeAddressId}:
     get:
       tags:
-      - products
+        - products
+      summary: get all products
       description: |
-        get products by groups
+        Allows you to get products by groups. Represents a physical product in a store, although we give stores flexibility to configure what they want to offer as products. Each product belongs in a section.
       operationId: productsGet
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -106,10 +176,18 @@ paths:
                   $ref: '#/components/schemas/ProductGroup'
     patch:
       tags:
-      - products
+        - products
+      summary: edit products
       description: |
-        edit products
+        Allow you to edit product parameters
       operationId: productsPatch
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -119,7 +197,7 @@ paths:
               items:
                 $ref: '#/components/schemas/ProductGroup'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -127,49 +205,33 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductGroup'
-        "204":
+        '204':
           description: No Content
-        "422":
+        '422':
           description: Unprocessable Content
-  /products/:storeAddressId/modify:
-    patch:
+  /products/{storeAddressId}/{groupId}:
+    delete:
       tags:
         - products
+      summary: delete group of products
       description: |
-       This method only edits price and availability for one product
-      operationId: productPatch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/Product'
-      responses:
-        "200":
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-        "204":
-          description: No Content
-        "422":
-          description: Unprocessable Content
-  /products/:storeAddressId/:groupId:
-    delete:
-      tags:
-      - products
-      description: |
-        delete group of products
+        Allow you to delete group of products
       operationId: productGroupDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: Unique identifier of the product group
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: No Content
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -177,17 +239,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ProductGroup'
-  /products/:storeAddressId/:groupId/:productId:
+        '204':
+          description: No Content
+  /products/{storeAddressId}/{groupId}/{productId}:
     delete:
       tags:
-      - products
+        - products
+      summary: delete product
       description: |
-        delete product by id
+        Allow you to delete product by id
       operationId: productDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: groupId
+          in: path
+          description: Unique identifier of the product group
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Unique identifier of the product
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: No Content
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -195,16 +277,25 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-
-  /menu-collections/:storeAddressId:
+        '204':
+          description: No Content
+  /menu-collections/{storeAddressId}:
     get:
       tags:
         - collections
+      summary: get Collections
       description: |
-        get collections
+        Allow you to get collections
       operationId: CollectionsGet
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -215,9 +306,17 @@ paths:
     patch:
       tags:
         - collections
+      summary: edit collections
       description: |
-        edit collections
+        Allow you to edit collections
       operationId: collectionsPatch
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -227,7 +326,7 @@ paths:
               items:
                 $ref: '#/components/schemas/Collections'
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -235,23 +334,36 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Collections'
-        "204":
+        '204':
           description: No Content
-        "422":
+        '422':
           description: Unprocessable Content
-  /menu-collections/:storeAddressId/:collectionId?:
+  /menu-collections/{storeAddressId}/{collectionId}:
     delete:
       tags:
         - collections
+      summary: delete Collection
       description: |
-        * collectionId parameter is optional
+        Allow you to delete coollection by id
+        * CollectionId parameter is optional
         * Deleting a collection and all related entities by collectionId
         * Deleting only collections by storeAddressId
       operationId: CollectionDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: collectionId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
-        "204":
-          description: No Content
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -259,14 +371,23 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Collections'
-
-  /menu-supercollections/:storeAddressId:
+        '204':
+          description: No Content
+  /menu-supercollections/{storeAddressId}:
     get:
       tags:
         - super collections
+      summary: get all supper collections
       description: |
-        get SuperCollections
+        Allow you to get Super Collections.
       operationId: SuperCollectionsGet
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: Ok
@@ -279,9 +400,17 @@ paths:
     patch:
       tags:
         - super collections
+      summary: edit Supper Collection
       description: |
-        edit SuperCollections
+        Allow you to edit Super Collections
       operationId: superCollectionsPatch
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
@@ -303,42 +432,74 @@ paths:
           description: No Content
         '422':
           description: Unprocessable Content
+  /menu-supercollections/{storeAddressId}/{superCollectionId}:
+    delete:
+      tags:
+        - super collections
+      summary: delete Super Collection
+      description: >
+        * superCollectionId parameter is optional
 
-  /menu-supercollections/:storeAddressId/:superCollectionId?:
-      delete:
-        tags:
-          - super collections
-        description: |
-          * superCollectionId parameter is optional
-          * Deleting a superCollection and all related entities by superCollectionId
-          * Deleting only superCollection by storeAddressId
-        operationId: SuperCollectionDelete
-        responses:
-          '200':
-            description: Ok
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: '#/components/schemas/SuperCollections'
-          '204':
-            description: No Content
+        * Deleting a superCollection and all related entities by
+        superCollectionId
 
-  /orders/status/:storeAddressId:
+        * Deleting only superCollection by storeAddressId
+      operationId: SuperCollectionDelete
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: superCollectionId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+        '204':
+          description: No Content
+  /orders/status/{storeAddressId}:
     put:
       tags:
         - orders
+      summary: update order status
       description: |
-        update order status
+        Allows the update of the order status during different stages of the preparation.
+
+        "ACCEPTED": The order has been accepted by the store. Be aware that if you don't accept the order we will still move forward with the order, as we don't require an acceptance to proceed.
+
+        "READY_FOR_PICKUP": The order is ready to be picked up by a courier or the customer (Only available for orders delivered by Glovo couriers)
+
+        "OUT_FOR_DELIVERY": The courier has collected the order in the store and is now being delivered to the customer (Only available for Marketplace orders)
       operationId: orderUpdateStatus
       parameters:
-        - in: query
-          name: Status List
-          description: "select value of Status List"
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
           schema:
             type: string
-            enum: [ "ACCEPTED", "READY_FOR_PICKUP", "OUT_FOR_DELIVERY" ]
+        - name: Status List
+          in: query
+          description: select value of Status List
+          required: true
+          schema:
+            type: string
+            enum:
+              - ACCEPTED
+              - READY_FOR_PICKUP
+              - OUT_FOR_DELIVERY
       requestBody:
         required: true
         content:
@@ -348,23 +509,32 @@ paths:
               properties:
                 status:
                   type: string
+                  example: ACCEPTED
                 orderId:
                   type: string
+                  example: MQ123123
       responses:
-        "200":
+        '200':
           description: Ok
-        "400":
-          description: 'bad request'
-
-  /schedule/:storeAddressId:
+        '400':
+          description: Bad request
+  /schedule/{storeAddressId}:
     get:
       tags:
         - schedule
+      summary: get schedule of work
       description: |
         get schedule by store id
       operationId: ScheduleGet
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -389,9 +559,8 @@ paths:
                                 type: string
                               closing:
                                 type: string
-        "400":
-          description: 'bad request'
-
+        '400':
+          description: bad request
   /spots/{token}/getAccountNumber/:
     parameters:
       - $ref: '#/components/parameters/tokenUrl'
@@ -402,7 +571,7 @@ paths:
         get acount number
       operationId: spotsAccount
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -422,7 +591,7 @@ paths:
         get spots
       operationId: spotsGet
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -430,7 +599,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Spot'
-
   /spots/{accountNumber}/{spotId}/:
     parameters:
       - $ref: '#/components/parameters/accountNumber'
@@ -452,7 +620,7 @@ paths:
                   type: string
                   example: 321
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -464,7 +632,6 @@ paths:
                     properties:
                       storeAddressId:
                         example: 321
-
   /spots/{accountNumber}/{spotId}/sendError/:
     parameters:
       - $ref: '#/components/parameters/accountNumber'
@@ -476,7 +643,7 @@ paths:
         set error about spot
       operationId: spotError
       responses:
-        "200":
+        '200':
           description: Ok
           content:
             application/json:
@@ -488,8 +655,6 @@ paths:
                     properties:
                       status:
                         example: PENDING
-
-
 components:
   parameters:
     accountNumber:
@@ -513,35 +678,47 @@ components:
       required: true
       schema:
         type: string
-
   schemas:
     Option:
       type: object
       properties:
         id:
           type: string
+          example: side_1
         title:
           type: string
+          example: cheese side
         active:
           type: boolean
+          example: true
         price:
           type: number
-      description: option for products
+          example: 30
+      description: options for products
     OptionGroup:
       type: object
       properties:
         id:
           type: string
+          example: pizzaSides
         title:
           type: string
+          example: Choose a side
         active:
           type: boolean
+          example: true
+          description: Specifies if the option is available to be purchased
         min:
           type: number
+          example: 0
+          description: Minimum of options a customer can choose from the group
         max:
           type: number
+          example: 1
+          description: Maximum of options a customer can choose from the group
         moreThanOnce:
           type: boolean
+          description: Indecates if the customer can choose more than option from the group
         items:
           type: array
           items:
@@ -552,37 +729,54 @@ components:
       properties:
         id:
           type: string
+          example: pizza_1
         title:
           type: string
+          example: Margherita
         active:
           type: boolean
+          example: true
         description:
           type: string
+          example: pizza with tomato paste, mozzarella, tomatos and basilicum
         price:
           type: number
+          example: 220
         hitSales:
           type: boolean
+          example: true
+          description: show if availiable to sale
         image:
           type: string
+          example: https://glovoapp.com/images/logo_green.svg
+          description: Url of the main product image. Must use HTTPS protocol.
         position:
           type: integer
+          example: 0
+          description: Relative position of the product in the product group
+
         options:
           type: array
           items:
             type: string
-          description: array id options
+          description: array of option group ids
       description: product
     ProductGroup:
       type: object
       properties:
         id:
           type: string
+          example: 34291522
         title:
           type: string
+          example: Pizzas
+          description: Product group name
         active:
           type: boolean
         position:
           type: integer
+          example: 0
+          description: Relative position of the product group in the collection
         items:
           type: array
           items:
@@ -593,41 +787,52 @@ components:
       properties:
         id:
           type: string
+          example: 23456723
         title:
           type: string
+          example: Italian food
+          description: Name of Collection
         active:
           type: boolean
+          example: true
         position:
           type: integer
+          example: 0
+          description: position of collections in Super Collection
         image:
           type: string
+          example: https://glovoapp.com/images/logo_green.svg
         productGroups:
           type: array
           items:
             type: string
           description: array id of ProductGroups
-
       description: Collection list
     SuperCollections:
-        type: object
-        properties:
-          id:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9823
+        title:
+          type: string
+          example: European food
+        active:
+          type: boolean
+          example:  true
+        position:
+          type: integer
+          example: 0
+          description: position of Super Collections in
+        image:
+          type: string
+          example: https://glovoapp.com/images/logo_green.svg
+        menuCollections:
+          type: array
+          items:
             type: string
-          title:
-            type: string
-          active:
-            type: boolean
-          position:
-            type: integer
-          image:
-            type: string
-          menuCollections:
-            type: array
-            items:
-              type: string
-            description: array id of MenuCollection
-        description: SuperCollection list
-
+          description: array id of MenuCollection
+      description: SuperCollection list
     Order:
       type: object
       properties:
@@ -635,12 +840,20 @@ components:
           type: string
         store_id:
           type: string
+          example: 123456
+          description: Your store id
         order_time:
           type: string
+          example: 2018-06-08 14:24:53
+          description: yyyy-MM-dd HH:mm:ss Local time of the acceptance of the order by Glovo
         estimated_pickup_time:
           type: string
+          example: 2018-06-08 14:45:44
+          description: Local time of courier's expected arrival at the store
         utc_offset_minutes:
           type: string
+          example: 60
+          description: Time difference in minutes between UTC and the local time of the store
         payment_method:
           type: string
         currency:
@@ -750,7 +963,6 @@ components:
         payment_strategy:
           type: string
       description: Order cancelled object
-
     Spot:
       type: object
       properties:
@@ -765,9 +977,18 @@ components:
           example: вул. Валентинівська, 743, Київ
         storeAddressId:
           type: string
-          example: 123
+          example: NQ123
         status:
           type: string
-          enum: ["PENDING", "SUCCESS", "ERROR"]
+          enum:
+            - PENDING
+            - SUCCESS
+            - ERROR
           example: PENDING
-
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
