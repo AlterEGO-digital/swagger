@@ -20,6 +20,8 @@ tags:
     description: working schedule of specific store
   - name: spots
     description: Pos terminals integration via poster
+  - name: Store Address
+    description: Data and operations are associated with the Store address
 paths:
   /options/{storeAddressId}:
     get:
@@ -787,6 +789,30 @@ paths:
                     properties:
                       status:
                         example: PENDING
+  /store-addresses/{storeAddressId}/clear-all/data:
+    parameters:
+      - name: storeAddressId
+        in: path
+        description: Unique identifier of the store
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - Store Address
+      summary:  Clearing all data for store address
+      description: |
+        Clearing all data for store address
+        clearing supercollections,
+        clearing collections,
+        cleaning product groups,
+        cleaning of goods,
+        clearing option groups,
+        clearing options,
+      operationId: spotError
+      responses:
+        '204':
+          description: No Content
 components:
   parameters:
     accountNumber:
