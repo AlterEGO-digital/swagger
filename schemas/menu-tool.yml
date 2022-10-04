@@ -20,6 +20,8 @@ tags:
     description: working schedule of specific store
   - name: spots
     description: Pos terminals integration via poster
+  - name: Store Address
+    description: Data and operations are associated with the Store address
   - name: multistore super collections
     description: Uppermost categorization of a Glovo menu for multistore. Super collections are not required. If at least one exists, a list of all the super collections is displayed to customers when they open a store in the app. Otherwise, the collection is displayed as the uppermost categorization.
   - name: multistore availability
@@ -797,6 +799,30 @@ paths:
                     properties:
                       status:
                         example: PENDING
+  /store-addresses/{storeAddressId}/clear-all/data:
+    parameters:
+      - name: storeAddressId
+        in: path
+        description: Unique identifier of the store
+        required: true
+        schema:
+          type: string
+    post:
+      tags:
+        - Store Address
+      summary:  Clearing all data for store address
+      description: |
+        Clearing all data for store address
+        clearing supercollections,
+        clearing collections,
+        cleaning product groups,
+        cleaning of goods,
+        clearing option groups,
+        clearing options,
+      operationId: spotError
+      responses:
+        '204':
+          description: No Content
 
 
 
@@ -1560,7 +1586,7 @@ components:
           example: European food
         active:
           type: boolean
-          example: true
+          example:  true
         position:
           type: integer
           example: 0
