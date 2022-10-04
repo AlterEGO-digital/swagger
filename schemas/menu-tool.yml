@@ -20,6 +20,16 @@ tags:
     description: working schedule of specific store
   - name: spots
     description: Pos terminals integration via poster
+  - name: multistore super collections
+    description: Uppermost categorization of a Glovo menu for multistore. Super collections are not required. If at least one exists, a list of all the super collections is displayed to customers when they open a store in the app. Otherwise, the collection is displayed as the uppermost categorization.
+  - name: multistore availability
+    description: availability.
+  - name: multistore options
+    description: Additional options that could be added to the product for multistore. Options are not required
+  - name: multistore products
+    description: Product data related to the store for multistore. Product group is lower categorization of a Glovo menu
+  - name: multistore collections
+    description: Main categorization of a Glovo menu for multistore. It is mandatory to have at least one collection in your menu.
 paths:
   /options/{storeAddressId}:
     get:
@@ -787,6 +797,598 @@ paths:
                     properties:
                       status:
                         example: PENDING
+
+
+
+  /{storeId}/supercollections:
+    get:
+      tags:
+        - multistore super collections
+      summary: get all supper collections for multiStore
+      description: |
+        Allow you to get Super Collections for multiStore.
+      #      operationId: SuperCollectionsGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+    patch:
+      tags:
+        - multistore super collections
+      summary: edit Supper Collection
+      description: |
+        Allow you to edit Super Collections
+      operationId: MultiStoreSuperCollectionsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                'collections':
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SuperCollections'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+    delete:
+      tags:
+        - multistore super collections
+      summary: delete Supper Collection
+      description: |
+        Allow you to edit Super Collections
+      operationId: MultiStoreSuperCollectionsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '204':
+          description: No Content
+  /{$storeId}/supercollections/{superCollectionId}:
+    delete:
+      tags:
+        - multistore super collections
+      summary: delete Super Collection
+      description: >
+        * superCollectionId parameter is optional
+
+        * Deleting a superCollection and all related entities by
+        superCollectionId
+
+        * Deleting only superCollection by storeAddressId
+      operationId: MultiStoreSuperCollectionDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: superCollectionId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SuperCollections'
+        '204':
+          description: No Content
+
+
+  /{storeId}/collections:
+    get:
+      tags:
+        - multistore collections
+      summary: get all collections for multiStore
+      description: |
+        Allow you to get Collections for multiStore.
+            operationId: MultiStoreCollectionsGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
+    patch:
+      tags:
+        - multistore collections
+      summary: edit Collection
+      description: |
+        Allow you to edit Collections
+      operationId: MultiStoreCollectionsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                'collections':
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Collections'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+    delete:
+      tags:
+        - multistore collections
+      summary: delete Collection
+      description: |
+        Allow you to edit Collections
+      operationId: MultiStoreCollectionsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '204':
+          description: No Content
+  /{$storeId}/collections/{collectionId}:
+    delete:
+      tags:
+        - multistore collections
+      summary: delete  Collection
+      description: >
+        * collectionId parameter is optional
+
+        * Deleting a collection and all related entities by
+        collectionId
+
+        * Deleting only collection by storeAddressId
+      operationId: MultiStoreCollectionDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: collectionId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Collections'
+        '204':
+          description: No Content
+  /{storeId}/products:
+    get:
+      tags:
+        - multistore products
+      summary: get all products
+      description: |
+        Allows you to get products by groups. Represents a physical product in a store, although we give stores flexibility to configure what they want to offer as products.
+        Each product belongs in a section.
+      operationId: MultiStoreProductsGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
+    patch:
+      tags:
+        - multistore products
+      summary: edit products
+      description: |
+        Allow you to edit product parameters
+      operationId: MultiStoreProductsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                'products':
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductGroup'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+  /{storeId}/products/modify:
+    patch:
+      tags:
+        - multistore products
+      summary: edit one product
+      description: |
+        This method only edits price and availability for one product
+      operationId: MultiStoreProductsModify
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                'products':
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductGroup'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '400':
+          description: Bad Request
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+  /{storeId}/products/{groupId}:
+    delete:
+      tags:
+        - multistore products
+      summary: delete group of products
+      description: |
+        Allow you to delete group of products
+      operationId: MultiStoreProductGroupDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: groupId
+          in: path
+          description: Unique identifier of the product group
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductGroup'
+        '204':
+          description: No Content
+  /{storeId}/products/{groupId}/{productId}:
+    delete:
+      tags:
+        - multistore products
+      summary: delete product
+      description: |
+        Allow you to delete product by id
+      operationId: MultiStoreProductDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: groupId
+          in: path
+          description: Unique identifier of the product group
+          required: true
+          schema:
+            type: string
+        - name: productId
+          in: path
+          description: Unique identifier of the product
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+        '204':
+          description: No Content
+  /{storeId}/products/prices:
+    get:
+      tags:
+        - multistore products
+      summary: get all products prices
+      description: |
+      operationId: MultiStoreProductsPriceGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPrices'
+    patch:
+      tags:
+        - multistore products
+      summary: edit products
+      description: |
+        Allow you to edit product prices
+      operationId: MultiStoreProductsPricePatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                'product_prices':
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ProductPrices'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductPrices'
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+  /{storeId}/options:
+    get:
+      tags:
+        - multistore options
+      summary: get all options by group
+      description: |
+        Get all options by groups. Each option group can have a minimum and maximum of choices for the customer. It is not mandatory for a product to have option. Each option could have a different price impact. Examples of attribute groups could include: Sauces, Drinks, etc
+      operationId: MultiStoreOptionsGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/OptionGroup'
+                  properties:
+                     store_id:
+                        type: string
+
+        '204':
+          description: No Content
+    patch:
+      tags:
+        - multistore options
+      summary: update options
+      description: |
+        Allows you to perform a partial update over an option. Only the options sent in the request will be updated.
+      operationId: MultiStoreOptionsPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                options:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/OptionGroup'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  allOf:
+                    - $ref: '#/components/schemas/OptionGroup'
+                  properties:
+                    store_id:
+                      type: string
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+  /{storeId}/options/{groupId}:
+    delete:
+      tags:
+        - multistore options
+      summary: delete group of options
+      description: |
+        Allows you to delete group of options.
+      operationId: MultiStoreOptionGroupDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: groupId
+          in: path
+          description: Unique identifier of the option group
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OptionGroup'
+        '204':
+          description: No Content
+  /{storeId}/options/{groupId}/{optionId}:
+    delete:
+      tags:
+        - multistore options
+      summary: delete option
+      description: |
+        Allows you to delete option by id.
+      operationId: MultiStoreOptionDelete
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: groupId
+          in: path
+          description: Unique identifier of the option group
+          required: true
+          schema:
+            type: string
+        - name: optionId
+          in: path
+          description: Unique identifier of the option
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Option'
+        '204':
+          description: No Content
+  /{storeId}/{entityType}/availability:
+    get:
+      tags:
+        - multistore availability
+      summary: multistore availability
+      description: |
+        multistore availability
+            operationId: MultiStoreAvailabilityGet
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: entityType
+          in: path
+          description: Type of entity
+          required: true
+          schema:
+            type: string
+            enum:
+              - supercollections
+              - collections
+              - product_groups
+              - products
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+    patch:
+      tags:
+        - multistore availability
+      summary: edit availability
+      description: |
+        Allow you to edit availability
+            operationId: MultiStoreAvailabilityPatch
+      parameters:
+        - $ref: '#/components/parameters/storeId'
+        - name: entityType
+          in: path
+          description: Type of entity
+          required: true
+          schema:
+            type: string
+            enum:
+              - supercollections
+              - collections
+              - product_groups
+              - products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                store_availability:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Availability'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Availability'
+        '422':
+          description: Unprocessable Content
 components:
   parameters:
     accountNumber:
@@ -807,6 +1409,13 @@ components:
       name: spotId
       in: path
       description: access token
+      required: true
+      schema:
+        type: string
+    storeId:
+      name: storeId
+      in: path
+      description: id of store
       required: true
       schema:
         type: string
@@ -951,7 +1560,7 @@ components:
           example: European food
         active:
           type: boolean
-          example:  true
+          example: true
         position:
           type: integer
           example: 0
@@ -1117,6 +1726,36 @@ components:
             - SUCCESS
             - ERROR
           example: PENDING
+    Availability:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 123
+          description: id of entity
+        availability:
+          type: object
+          properties:
+            store_address_id:
+              type: string
+            is_available:
+              type: boolean
+    ProductPrices:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123e4567-e89b-12d3-a456-426655440000"
+          description: Product id
+        prices:
+          type: array
+          items:
+            type: object
+            properties:
+              store_address_id:
+                type: string
+              price:
+                type: boolean
   securitySchemes:
     bearerAuth:
       type: http
