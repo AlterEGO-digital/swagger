@@ -190,6 +190,14 @@ paths:
           required: true
           schema:
             type: string
+        - name: X-Send-To-Glovo
+          in: header
+          description: If the parameter is set to "false", then uploading to Glovo will not occur
+          required: false
+          schema:
+            type: string
+            enum:
+              - false
       requestBody:
         required: true
         content:
