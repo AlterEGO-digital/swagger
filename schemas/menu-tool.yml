@@ -789,7 +789,7 @@ paths:
                     properties:
                       status:
                         example: PENDING
-  /store-addresses/{storeAddressId}/clear-all/data:
+  /store-addresses/{storeAddressId}/clear-all-data:
     parameters:
       - name: storeAddressId
         in: path
