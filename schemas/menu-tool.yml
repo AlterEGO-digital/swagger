@@ -556,6 +556,101 @@ paths:
           description: Ok
         '400':
           description: Bad request
+  /orders/modify/{storeAddressId}:
+    post:
+      tags:
+        - orders
+      summary: modify products in order
+      description: |
+        An update request can only be sent once, all subsequent requests will be rejected
+      operationId: orderModifyProducts
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  example: "1231231"
+                replacements:
+                  required: true
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      purchased_product_id:
+                        type: string
+                        required: true
+                      product:
+                        type: array
+                        required: true
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              required: true
+                              type: string
+                            quantity:
+                              required: true
+                              type: integer
+                            attributes:
+                              type: array
+                              required: true
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                    required: true
+                                  quantity:
+                                    type: integer
+                                    required: true
+                removed:
+                  required: true
+                  type: array
+                  items:
+                    type: string
+                    description: 'Purchase id'
+                added:
+                  required: true
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        required: true
+                      quantity:
+                        required: true
+                        type: integer
+                      attributes:
+                        type: array
+                        required: true
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              required: true
+                            quantity:
+                              type: integer
+                              required: true
+
+
+      responses:
+        '200':
+          description: Ok
+        '400':
+          description: Bad request
   /schedule/{storeAddressId}:
     get:
       tags:
