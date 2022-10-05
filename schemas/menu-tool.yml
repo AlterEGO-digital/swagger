@@ -644,8 +644,6 @@ paths:
                             quantity:
                               type: integer
                               required: true
-
-
       responses:
         '200':
           description: Ok
