@@ -576,74 +576,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                orderId:
-                  type: string
-                  example: "1231231"
-                replacements:
-                  required: true
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      purchased_product_id:
-                        type: string
-                        required: true
-                      product:
-                        type: array
-                        required: true
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              required: true
-                              type: string
-                            quantity:
-                              required: true
-                              type: integer
-                            attributes:
-                              type: array
-                              required: true
-                              items:
-                                type: object
-                                properties:
-                                  id:
-                                    type: string
-                                    required: true
-                                  quantity:
-                                    type: integer
-                                    required: true
-                removed:
-                  required: true
-                  type: array
-                  items:
-                    type: string
-                    description: 'Purchase id'
-                added:
-                  required: true
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                        required: true
-                      quantity:
-                        required: true
-                        type: integer
-                      attributes:
-                        type: array
-                        required: true
-                        items:
-                          type: object
-                          properties:
-                            id:
-                              type: string
-                              required: true
-                            quantity:
-                              type: integer
-                              required: true
+              $ref: '#/components/schemas/OrderModify'
       responses:
         '200':
           description: Ok
@@ -1188,6 +1121,75 @@ components:
         payment_strategy:
           type: string
       description: Order cancelled object
+    OrderModify:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: "1231231"
+        replacements:
+          required: true
+          type: array
+          items:
+            type: object
+            properties:
+              purchased_product_id:
+                type: string
+                required: true
+              product:
+                type: array
+                required: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      required: true
+                      type: string
+                    quantity:
+                      required: true
+                      type: integer
+                    attributes:
+                      type: array
+                      required: true
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            required: true
+                          quantity:
+                            type: integer
+                            required: true
+        removed:
+          required: true
+          type: array
+          items:
+            type: string
+            description: 'Purchase id'
+        added:
+          required: true
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                required: true
+              quantity:
+                required: true
+                type: integer
+              attributes:
+                type: array
+                required: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      required: true
+                    quantity:
+                      type: integer
+                      required: true
     Spot:
       type: object
       properties:
