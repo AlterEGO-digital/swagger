@@ -15,19 +15,17 @@ tags:
   - name: super collections
     description: Uppermost categorization of a Glovo menu. Super collections are not required. If at least one exists, a list of all the super collections is displayed to customers when they open a store in the app. Otherwise, the collection is displayed as the uppermost categorization.
   - name: orders
-    description: Update order status / products
+    description: Representation of an order that belongs to a particular store. Update order status and products in the order
   - name: schedule
-    description: working schedule of specific store
-  - name: spots
-    description: Pos terminals integration via poster
-  - name: Store Address
+    description: Give ability to activate/deactivate specific store
+  - name: store address
     description: Data and operations are associated with the Store address
 paths:
   /options/{storeAddressId}:
     get:
       tags:
         - options
-      summary: get all options by group
+      summary: get all Options by group
       description: |
         Get all options by groups. Each option group can have a minimum and maximum of choices for the customer. It is not mandatory for a product to have option. Each option could have a different price impact. Examples of attribute groups could include: Sauces, Drinks, etc
       operationId: optionsGet
@@ -50,7 +48,7 @@ paths:
     patch:
       tags:
         - options
-      summary: update options
+      summary: update Options
       description: |
         Allows you to perform a partial update over an option. Only the options sent in the request will be updated.
       operationId: optionsPatch
@@ -86,7 +84,7 @@ paths:
     delete:
       tags:
         - options
-      summary: delete group of options
+      summary: delete Option group
       description: |
         Allows you to delete group of options.
       operationId: optionGroupDelete
@@ -118,7 +116,7 @@ paths:
     delete:
       tags:
         - options
-      summary: delete option
+      summary: delete Option
       description: |
         Allows you to delete option by id.
       operationId: optionDelete
@@ -156,7 +154,7 @@ paths:
     get:
       tags:
         - products
-      summary: get all products
+      summary: get all Products
       description: |
         Allows you to get products by groups. Represents a physical product in a store, although we give stores flexibility to configure what they want to offer as products. Each product belongs in a section.
       operationId: productsGet
@@ -179,7 +177,7 @@ paths:
     patch:
       tags:
         - products
-      summary: edit products
+      summary: edit Products
       description: |
         Allow you to edit product parameters
       operationId: productsPatch
@@ -223,7 +221,7 @@ paths:
     patch:
       tags:
         - products
-      summary: edit one product
+      summary: edit one Product
       description: |
         This method only edits price and availability for one product
       operationId: productsModify
@@ -261,7 +259,7 @@ paths:
     delete:
       tags:
         - products
-      summary: delete group of products
+      summary: delete Product groups
       description: |
         Allow you to delete group of products
       operationId: productGroupDelete
@@ -293,7 +291,7 @@ paths:
     delete:
       tags:
         - products
-      summary: delete product
+      summary: delete Product
       description: |
         Allow you to delete product by id
       operationId: productDelete
@@ -333,7 +331,7 @@ paths:
         - collections
       summary: get Collections
       description: |
-        Allow you to get collections
+        Allow you to get Collections
       operationId: CollectionsGet
       parameters:
         - name: storeAddressId
@@ -354,9 +352,9 @@ paths:
     patch:
       tags:
         - collections
-      summary: edit collections
+      summary: edit Collections
       description: |
-        Allow you to edit collections
+        Allow you to edit Collections
       operationId: collectionsPatch
       parameters:
         - name: storeAddressId
@@ -392,7 +390,7 @@ paths:
         - collections
       summary: delete Collection
       description: |
-        Allow you to delete coollection by id
+        Allow you to delete one Collection by id
         * CollectionId parameter is optional
         * Deleting a collection and all related entities by collectionId
         * Deleting only collections by storeAddressId
@@ -425,7 +423,7 @@ paths:
     get:
       tags:
         - super collections
-      summary: get all supper collections
+      summary: get all Supper Collections
       description: |
         Allow you to get Super Collections.
       operationId: SuperCollectionsGet
@@ -521,7 +519,7 @@ paths:
     put:
       tags:
         - orders
-      summary: update order status
+      summary: update status  of the Order 
       description: |
         Allows the update of the order status during different stages of the preparation.
 
@@ -596,9 +594,9 @@ paths:
     get:
       tags:
         - schedule
-      summary: get schedule of work
+      summary: get schedule of specific Store
       description: |
-        get schedule by store id
+        Get schedule by Store id
       operationId: ScheduleGet
       parameters:
         - name: storeAddressId
@@ -639,9 +637,9 @@ paths:
     get:
       tags:
         - schedule
-      summary: Get active temporary closing
+      summary: get information about temporary closing Store
       description: |
-        Get active temporary closing
+        Get information about active temporary closing
       operationId: ScheduleClosingGet
       parameters:
         - name: storeAddressId
@@ -682,7 +680,7 @@ paths:
     put:
       tags:
         - schedule
-      summary: Active temporary closing
+      summary: activate temporary closing of the Store
       description: |
         Active temporary closing
       operationId: ScheduleClosingPut
@@ -702,7 +700,6 @@ paths:
               properties:
                 until:
                   type: string
-                  required: true
                   example: '2019-12-20T10:00:00+01:00'
                   description: 'Date must be a future'
       responses:
@@ -713,9 +710,9 @@ paths:
     delete:
       tags:
         - schedule
-      summary: Remove temporary closing
+      summary: remove temporary closing for the Store
       description: |
-        Active temporary closing
+        De-activate temporary closing
       operationId: ScheduleClosingDelete
       parameters:
         - name: storeAddressId
@@ -729,101 +726,7 @@ paths:
           description: Ok
         '400':
           description: bad request
-  /spots/{token}/getAccountNumber/:
-    parameters:
-      - $ref: '#/components/parameters/tokenUrl'
-    get:
-      tags:
-        - spots
-      description: |
-        get acount number
-      operationId: spotsAccount
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  accountNumber:
-                    type: string
-                    example: 123
-  /spots/{accountNumber}/:
-    parameters:
-      - $ref: '#/components/parameters/accountNumber'
-    get:
-      tags:
-        - spots
-      description: |
-        get spots
-      operationId: spotsGet
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Spot'
-  /spots/{accountNumber}/{spotId}/:
-    parameters:
-      - $ref: '#/components/parameters/accountNumber'
-      - $ref: '#/components/parameters/spotId'
-    patch:
-      tags:
-        - spots
-      description: |
-        set spot id
-      operationId: spotPatch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                storeAddressId:
-                  type: string
-                  example: 321
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/Spot'
-                  - type: object
-                    properties:
-                      storeAddressId:
-                        example: 321
-  /spots/{accountNumber}/{spotId}/sendError/:
-    parameters:
-      - $ref: '#/components/parameters/accountNumber'
-      - $ref: '#/components/parameters/spotId'
-    post:
-      tags:
-        - spots
-      description: |
-        set error about spot
-      operationId: spotError
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/Spot'
-                  - type: object
-                    properties:
-                      status:
-                        example: PENDING
-  /store-addresses/{storeAddressId}/clear-all/data:
+  /store-addresses/{storeAddressId}/clear-all-data:
     parameters:
       - name: storeAddressId
         in: path
@@ -833,8 +736,8 @@ paths:
           type: string
     delete:
       tags:
-        - Store Address
-      summary:  Clearing all data for store address
+        - store address
+      summary:  clearing all data for the Store
       description: |
         Clearing all data for store address
         clearing supercollections,
@@ -876,7 +779,7 @@ components:
       properties:
         id:
           type: string
-          example: side_1
+          example: 6d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: cheese side
@@ -892,7 +795,7 @@ components:
       properties:
         id:
           type: string
-          example: pizzaSides
+          example: 5d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: Choose a side
@@ -921,7 +824,7 @@ components:
       properties:
         id:
           type: string
-          example: pizza_1
+          example: 4d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: Margherita
@@ -946,7 +849,6 @@ components:
           type: integer
           example: 0
           description: Relative position of the product in the product group
-
         options:
           type: array
           items:
@@ -958,7 +860,7 @@ components:
       properties:
         id:
           type: string
-          example: 34291522
+          example: 3d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: Pizzas
@@ -979,7 +881,7 @@ components:
       properties:
         id:
           type: string
-          example: 23456723
+          example: 2d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: Italian food
@@ -1005,7 +907,7 @@ components:
       properties:
         id:
           type: string
-          example: 9823
+          example: 1d7a8ec6-47ea-11ed-b878-0242ac120002
         title:
           type: string
           example: European food
@@ -1224,28 +1126,6 @@ components:
                     quantity:
                       type: integer
                       required: true
-    Spot:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 123
-        name:
-          type: string
-          example: HOC
-        address:
-          type: string
-          example: вул. Валентинівська, 743, Київ
-        storeAddressId:
-          type: string
-          example: NQ123
-        status:
-          type: string
-          enum:
-            - PENDING
-            - SUCCESS
-            - ERROR
-          example: PENDING
   securitySchemes:
     bearerAuth:
       type: http
