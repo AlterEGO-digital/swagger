@@ -904,6 +904,11 @@ components:
           type: boolean
           example: true
           description: show if availiable to sale
+        extra_image_urls:
+          type: array
+          items:
+            type: string
+          example: ["https://glovoapp.com/images/logo_green_extra.svg", "https://glovoapp.com/images/logo_green_extra_2.svg"]
         image:
           type: string
           example: https://glovoapp.com/images/logo_green.svg
