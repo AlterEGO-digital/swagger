@@ -519,13 +519,15 @@ paths:
     put:
       tags:
         - orders
-      summary: update status  of the Order 
+      summary: update status  of the Order
       description: |
         Allows the update of the order status during different stages of the preparation.
 
         "ACCEPTED": The order has been accepted by the store. Be aware that if you don't accept the order we will still move forward with the order, as we don't require an acceptance to proceed.
 
         "READY_FOR_PICKUP": The order is ready to be picked up by a courier or the customer (Only available for orders delivered by Glovo couriers)
+
+        "PICKED_UP_BY_CUSTOMER": The order has been picked up by the customer (Only available for stores with Pickup by customer configuration enabled)
 
         "OUT_FOR_DELIVERY": The courier has collected the order in the store and is now being delivered to the customer (Only available for Marketplace orders)
       operationId: orderUpdateStatus
@@ -545,6 +547,7 @@ paths:
             enum:
               - ACCEPTED
               - READY_FOR_PICKUP
+              - PICKED_UP_BY_CUSTOMER
               - OUT_FOR_DELIVERY
       requestBody:
         required: true
