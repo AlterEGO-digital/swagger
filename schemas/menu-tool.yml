@@ -1431,6 +1431,13 @@ components:
         price:
           type: number
           example: 30
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/Translations'
+
+
       description: options for products
     OptionGroup:
       type: object
@@ -1460,6 +1467,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Option'
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/Translations'
       description: group of options
     Product:
       type: object
@@ -1501,6 +1513,11 @@ components:
           items:
             type: string
           description: array of option group ids
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/ProductTranslations'
       description: product
     ProductGroup:
       type: object
@@ -1518,6 +1535,11 @@ components:
           type: integer
           example: 0
           description: Relative position of the product group in the collection
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/Translations'
         items:
           type: array
           items:
@@ -1548,6 +1570,11 @@ components:
           items:
             type: string
           description: array id of ProductGroups
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/Translations'
       description: Collection list
     SuperCollections:
       type: object
@@ -1573,6 +1600,11 @@ components:
           items:
             type: string
           description: array id of MenuCollection
+        lang:
+          type: string
+          example: 'EN'
+        translations:
+          $ref: '#/components/schemas/Translations'
       description: SuperCollection list
     Order:
       type: object
@@ -1814,6 +1846,33 @@ components:
           properties:
             name_of_field:
               type: string
+    Translations:
+      type: object
+      description: Is displayed if multilingual is available. Required if multilingual is available. Key values are language codes.
+      additionalProperties:
+         $ref: '#/components/schemas/TranslationProps'
+    TranslationProps:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Test
+    ProductTranslations:
+      type: object
+      description: Is displayed if multilingual is available. Required if multilingual is available. Key values are language codes.
+      additionalProperties:
+        $ref: '#/components/schemas/ProductTranslationProps'
+    ProductTranslationProps:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Test
+        description:
+          type: string
+          example: Test
+
+
   securitySchemes:
     bearerAuth:
       type: http
