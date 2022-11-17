@@ -20,6 +20,8 @@ tags:
     description: Give ability to activate/deactivate specific store
   - name: store address
     description: Data and operations are associated with the Store address
+  - name: draft
+    description: Data and operations are associated with the draft of Store address
   - name: multistore super collections
     description: Uppermost categorization of a Glovo menu for multistore. Super collections are not required. If at least one exists, a list of all the super collections is displayed to customers when they open a store in the app. Otherwise, the collection is displayed as the uppermost categorization.
   - name: multistore availability
@@ -30,6 +32,8 @@ tags:
     description: Product data related to the store for multistore. Product group is lower categorization of a Glovo menu
   - name: multistore collections
     description: Main categorization of a Glovo menu for multistore. It is mandatory to have at least one collection in your menu.
+  - name: draft multistore
+    description: Data and operations are associated with the draft of Store
 paths:
   /options/{storeAddressId}:
     get:
@@ -763,7 +767,27 @@ paths:
       responses:
         '204':
           description: No Content
-
+  /draft-revision/{storeAddressId}/status :
+    parameters:
+      - name: storeAddressId
+        in: path
+        description: Unique identifier of the store address
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - draft
+      summary:  Returns draft status
+      operationId: draftStatus
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              type: object
+              schema:
+                $ref: '#/components/schemas/DraftStatus'
 
 
   /{storeId}/supercollections:
@@ -1393,6 +1417,27 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/StandardValidationErrors'
+  /{storeId}/draft-revision/status:
+    parameters:
+      - name: storeId
+        in: path
+        description: Unique identifier of the store
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - draft multistore
+      summary: Returns draft status
+      operationId: draftStatus
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              type: object
+              schema:
+                $ref: '#/components/schemas/DraftStatus'
 components:
   parameters:
     accountNumber:
@@ -1822,6 +1867,13 @@ components:
           properties:
             name_of_field:
               type: string
+    DraftStatus:
+      type: object
+      properties:
+        draft_updated_at:
+          type: string
+          format: date-time
+
   securitySchemes:
     bearerAuth:
       type: http
