@@ -753,6 +753,43 @@ paths:
       responses:
         '204':
           description: No Content
+  api/partners_api/store/{storeId}/products/bulk-update:
+    parameters:
+      - $ref: '#/components/parameters/storeId'
+    patch:
+      tags:
+        - partner api
+      summary:  Bulk update of an endpoint with an external ID,
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/PartnerApiProduct'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                items:
+                  type: object
+                  properties:
+                    errors:
+                      type: array
+                      example:
+                        - row: 0
+                          messages:
+                            - stores_addresses.0.available :
+                              - The stores_addresses.0.available field must be true or false.
+                    update_result:
+                      type: object
+                      example:
+                        store_address_id: 123-12332-221
+                        update_transaction: 321-9875-965-9852
+
 components:
   parameters:
     accountNumber:
@@ -773,6 +810,13 @@ components:
       name: spotId
       in: path
       description: access token
+      required: true
+      schema:
+        type: string
+    storeId:
+      name: storeId
+      in: path
+      description: id of store
       required: true
       schema:
         type: string
@@ -1134,6 +1178,41 @@ components:
                     quantity:
                       type: integer
                       required: true
+    PartnerApiProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          required: true
+          example: 123-3214
+        price:
+          type: number
+          example: 123.45
+          description: if multiprice == false - mandatory
+        multiprice:
+          type: boolean
+          example: true
+        stores_addresses:
+          description: optional (mandatory if updating availability or different prices)
+          type: array
+          items:
+            $ref: '#/components/schemas/PartnerApiProductStoreAddress'
+    PartnerApiProductStoreAddress:
+      type: object
+      properties:
+        storeAddressId:
+          type: string
+          required: true
+        price:
+          type: number
+          description: if multiprice == true - mandatory
+        available:
+          type: boolean
+        stock:
+          type: integer
+        threshold:
+          type: integer
+
   securitySchemes:
     bearerAuth:
       type: http
