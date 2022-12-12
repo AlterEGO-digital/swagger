@@ -753,7 +753,7 @@ paths:
       responses:
         '204':
           description: No Content
-  api/partners_api/store/{storeId}/products/bulk-update:
+  /api/partners_api/store/{storeId}/products/bulk-update:
     parameters:
       - $ref: '#/components/parameters/storeId'
     patch:
