@@ -901,6 +901,9 @@ components:
           type: integer
           example: 0
           description: Relative position of the product in the product group
+        external_id:
+          type: string
+          example: 4d7a8ec6-47ea-11ed-b878-0242ac120002
         options:
           type: array
           items:
