@@ -217,6 +217,91 @@ paths:
           description: No Content
         '422':
           description: Unprocessable Content
+  /products/{storeAddressId}/bulk:
+    patch:
+      tags:
+        - products
+      summary: edit some Products
+      description: |
+        This method edits title, price, image and availability for some products
+      operationId: productsBulk
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ProductGroup'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  updatedProducts:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductGroup'
+                  transaction_id:
+                    type: string
+                    example: "3f6666f6-03e3-49c3-bb3e-78708daddbb7b"
+        '400':
+          description: Bad Request
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+  /products/{storeAddressId}/bulk/{transactionId}:
+    get:
+      tags:
+        - products
+      summary: Сhecking the status
+      description: |
+        Method checking the status of updated products in glovo by bulk method
+      operationId: productsBulkVerify
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: Unique identifier of the store
+          required: true
+          schema:
+            type: string
+        - name: transactionId
+          in: path
+          description: Unique identifier of the bulk operation
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: integer
+                    example: '200'
+                  result:
+                    $ref: '#/components/schemas/GlovoVerify'
+        '400':
+          description: Bad Request
+        '204':
+          description: No Content
+        '422':
+          description: Unprocessable Content
+
   /products/{storeAddressId}/modify:
     patch:
       tags:
@@ -1134,6 +1219,33 @@ components:
                     quantity:
                       type: integer
                       required: true
+    GlovoVerify:
+      type: object
+      properties:
+        transaction_id:
+          type: string
+          example: "3f6666f6-03e3-49c3-bb3e-78708daddbb7b"
+        status:
+          type: string
+          enum:
+            - "SUCCESS"
+            - "PROCESSING"
+            - "PARTIALLY_PROCESSED"
+            - "NOT_PROCESSED"
+            - "GLOVO_ERROR"
+          example: "SUCCESS"
+        last_updated_at:
+          type: string
+          example: "2022-03-24T10:03:49.614Z"
+        details:
+          type: array
+          items:
+            type: string
+          example:
+            - 'Products updated: [11111, 22222]'
+            - 'Products not updated: [12345, 56789]'
+            - 'Attributes updated: [33333, 44444]'
+            - 'Attributes not updated: [67890, 45678]'
   securitySchemes:
     bearerAuth:
       type: http
