@@ -969,6 +969,13 @@ components:
         price:
           type: number
           example: 220
+        restrictions:
+          type: object
+          properties:
+            is_tobacco:
+              type: boolean
+            is_alcohol:
+              type: boolean
         hitSales:
           type: boolean
           example: true
