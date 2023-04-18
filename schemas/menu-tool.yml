@@ -974,7 +974,7 @@ components:
           properties:
             is_tobacco:
               type: boolean
-            is_alcohol:
+            is_alcoholic:
               type: boolean
         hitSales:
           type: boolean
