@@ -301,6 +301,40 @@ paths:
           description: No Content
         '422':
           description: Unprocessable Content
+  /products/{storeAddressId}/transactions/{transactionId}:
+    get:
+      tags:
+        - products
+      operationId: productsUpdateTransaction
+      summary: Get transaction details of product update
+      parameters:
+        - name: storeAddressId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the store address
+        - name: transactionId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the transaction
+      responses:
+        '200':
+          description: Successful response with transaction details
+          content:
+            application/json:
+              example:
+                queue_transaction_id: "105814-64aebb8d212df"
+                status: "processed"
+                store_address_id: "105814"
+        '400':
+          description: Transaction not found
+          content:
+            application/json:
+              example:
+                message: "Transaction not exists"
   /products/{storeAddressId}/bulk:
     patch:
       tags:
