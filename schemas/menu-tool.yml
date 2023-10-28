@@ -1094,10 +1094,6 @@ components:
               type: boolean
             is_alcoholic:
               type: boolean
-        hitSales:
-          type: boolean
-          example: true
-          description: show if availiable to sale
         extra_image_urls:
           type: array
           items:
