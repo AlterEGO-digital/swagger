@@ -992,6 +992,92 @@ paths:
                       example:
                         store_address_id: 123-12332-221
                         update_transaction: 321-9875-965-9852
+  /busy-mode/{storeAddressId}:
+    put:
+      tags:
+        - busy-mode
+      summary: Create Busy Mode
+      description: Create the current busy mode status for the given store
+      operationId: Saturation-Management-Put-Busy-Mode
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: >
+            [Unique identifier of the store]
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                additionalPreparationTimeInMinutes:
+                  type: integer
+                  description: >-
+                    Additional preparation time in minutes, should always be
+                    between 10 and 30 minutes
+                  example: 15
+      responses:
+        '200':
+          description: Created Busy Mode for the store address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusyModeResponse'
+        '400':
+          description: >-
+            If the additionalPreparationTimeInMinutes is not between 10 and 30
+            minutes
+      security:
+        - token: [ ]
+    get:
+      tags:
+        - busy-mode
+      summary: Get Busy Mode
+      description: Get the current busy mode status for the given store
+      operationId: Saturation-Management-Get-Busy-Mode
+      parameters:
+        - name: storeId
+          in: path
+          description: >
+            [Unique identifier of the
+            store](#section/Getting-started/Unique-identifier-of-the-store)
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Existing Busy Mode for the store address
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BusyModeResponse'
+        '204':
+          description: No Busy Mode exists for the store address
+      security:
+        - token: [ ]
+    delete:
+      tags:
+        - busy-mode
+      summary: Delete Busy Mode
+      description: Delete the current busy mode status for the given store
+      operationId: Saturation-Management-Delete-Busy-Mode
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: >
+            [Unique identifier of the store]
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Busy Mode deleted for the store address
+      security:
+        - token: [ ]
+
 
 components:
   parameters:
@@ -1473,6 +1559,18 @@ components:
           description: Specifies if the product is available to be purchased
           example: true
           required: false
+    BusyModeResponse:
+      type: object
+      properties:
+        additionalPreparationTimeInMinutes:
+          type: integer
+          description: Additional preparation time in minutes
+          example: 15
+        endingAt:
+          type: string
+          description: Ending time of current busy mode
+          example: '2023-11-03T11:00:00.000Z'
+
   securitySchemes:
     bearerAuth:
       type: http
