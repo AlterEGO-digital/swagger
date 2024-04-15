@@ -956,7 +956,7 @@ paths:
       responses:
         '204':
           description: No Content
-  partners_api/store/{storeId}/products/bulk-update:
+  /partners_api/store/{storeId}/products/bulk-update:
     parameters:
       - $ref: '#/components/parameters/storeId'
     patch:
@@ -992,6 +992,34 @@ paths:
                       example:
                         store_address_id: 123-12332-221
                         update_transaction: 321-9875-965-9852
+  /menu/{storeAddressId}/bulk-update/upload-state-to-glovo:
+    post:
+      tags:
+        - bulk-update
+      summary: Allows you to update the availability and price for items and attributes in Glovo based on the existing menu
+      description: Allows you to update the availability and price for items and attributes in Glovo based on the existing menu
+      operationId: bulk-update__upload-state-to-glovo
+      parameters:
+        - name: storeAddressId
+          in: path
+          description: >
+            [Unique identifier of the store]
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  transaction_id:
+                    type: string
+                    example: "3f6666f6-03e3-49c3-bb3e-78708daddbb7b"
+        '400':
+          description: Bad Request
 
 components:
   parameters:
